@@ -28,11 +28,11 @@ module.exports = {
 		    fs.unlink(fullPath.replace(/\.json$/, '.backup'), errorFunc);
 		}
 	},
-	update(data, dataPath) {
+	update(dataPath, data) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
 		if (!fs.existsSync(fullPath)) {
-		    this.write(data, dataPath);
+		    this.write(dataPath, data);
 		} else {
 			let dbData = this.get(dataPath);
 			if (typeof dbData != 'object' && dbData !== null) {
@@ -46,7 +46,7 @@ module.exports = {
 			}
 		}
 	},
-	write(data, dataPath, overwrite = false) {
+	write(dataPath, data, overwrite = false) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
 		if (fs.existsSync(fullPath) && !overwrite) {

@@ -1,12 +1,20 @@
 {
   "name": "jsondb",
   "version": "1.0.0",
-  "description": "",
   "main": "jsondb.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ursi/jsondb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ursi/jsondb/issues"
+  },
+  "homepage": "https://github.com/Ursi/jsondb#readme",
+  "description": ""
 }

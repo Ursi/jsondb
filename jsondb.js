@@ -1,6 +1,6 @@
-const fs = require('fs');
-const fsp = fs.promises;
-const path = require('path');
+const fs = require('fs'),
+	fsp = fs.promises,
+	path = require('path');
 
 function addJson(str) {
 	if (!/\.json$/.test(str)) {
@@ -10,8 +10,11 @@ function addJson(str) {
 	return str;
 }
 
-module.exports = {
-	basePath: '.',
+module.exports = class {
+	constructor(basePath = '.') {
+		this.basePath = basePath;
+	}
+
 	async get(dataPath) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
@@ -24,7 +27,8 @@ module.exports = {
 				return backup;
 			}
 		}
-	},
+	}
+
 	remove(dataPath, removeBackup = false) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
@@ -32,7 +36,8 @@ module.exports = {
 		if (removeBackup) {
 			fsp.unlink(fullPath.replace(/\.json$/, '.backup'));
 		}
-	},
+	}
+
 	async update(dataPath, data) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
@@ -50,7 +55,8 @@ module.exports = {
 					.then(()=> fsp.writeFile(fullPath, JSON.stringify(newData)));
 			}
 		}
-	},
+	}
+
 	async write(dataPath, data, overwrite = false) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
@@ -59,5 +65,5 @@ module.exports = {
 		} else {
 			await fsp.writeFile(fullPath, JSON.stringify(data));
 		}
-	},
+	}
 }

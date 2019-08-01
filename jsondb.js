@@ -23,7 +23,7 @@ module.exports = class {
 		} catch (error) {
 			if (error.name == 'SyntaxError') {
 				let backup = JSON.parse(await fsp.readFile(fullPath.replace(/\.json$/, '.backup')));
-				await this.write(dataPath, backup, true);
+				await this.write(dataPath, backup, true, false);
 				return backup;
 			}
 		}
@@ -51,18 +51,22 @@ module.exports = class {
 				console.warn(`${dataPath} is an Array. Updating has no effect. Use 'jsondb.write instead'`);
 			} else {
 				let newData = Object.assign(dbData, data);
-				fsp.copyFile(fullPath, fullPath.replace(/\.json$/, '.backup'))
-					.then(()=> fsp.writeFile(fullPath, JSON.stringify(newData)));
+				await fsp.copyFile(fullPath, fullPath.replace(/\.json$/, '.backup'));
+				fsp.writeFile(fullPath, JSON.stringify(newData));
 			}
 		}
 	}
 
-	async write(dataPath, data, overwrite = false) {
+	async write(dataPath, data, overwrite = false, backup = true) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
 		if (fs.existsSync(fullPath) && !overwrite) {
 			console.error("File already exists. To overwrite this file, set 'overwrite' equal to 'true'.");
 		} else {
+			if (fs.existsSync(fullPath) && backup) {
+				await fsp.copyFile(fullPath, fullPath.replace(/\.json$/, '.backup'));
+			}
+
 			await fsp.writeFile(fullPath, JSON.stringify(data));
 		}
 	}

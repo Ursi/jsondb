@@ -47,7 +47,7 @@ module.exports = class {
 			let dbData = await this.get(dataPath);
 			if (typeof dbData != 'object' && dbData !== null) {
 				console.error(`'${dataPath}' is not an Object and cannot be updated. Use 'jsondb.write' instead.`);
-			} else if (dbData instanceof Array) {
+			} else if (Array.isArray(dbData)) {
 				console.warn(`${dataPath} is an Array. Updating has no effect. Use 'jsondb.write instead'`);
 			} else {
 				let newData = Object.assign(dbData, data);

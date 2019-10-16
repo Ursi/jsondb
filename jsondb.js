@@ -12,8 +12,12 @@ function addJson(str) {
 }
 
 module.exports = class {
-	constructor(basePath = `.`) {
-		this.basePath = basePath;
+	constructor(basePath = `.`, safe = false) {
+		Object.assign(this, {
+			basePath,
+			safe
+		});
+
 		if (!fs.existsSync(basePath)) fs.mkdirSync(basePath);
 	}
 
@@ -64,7 +68,7 @@ module.exports = class {
 	}
 
 	async write(dataPath, data, {
-		overwrite = false,
+		overwrite = !this.safe,
 		backup = true,
 		replacer = null,
 		space = ``,

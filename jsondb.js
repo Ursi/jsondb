@@ -48,7 +48,7 @@ module.exports = class {
 		dataPath = addJson(dataPath);
 		const fullPath = path.join(this.basePath, dataPath);
 		if (!fs.existsSync(fullPath)) {
-			this.write(dataPath, data);
+			this.write(dataPath, data, {replacer, space});
 		} else {
 			const dbData = await this.get(dataPath);
 			if (typeof dbData != `object` && dbData !== null) {

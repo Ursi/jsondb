@@ -14,6 +14,7 @@ function addJson(str) {
 module.exports = class {
 	constructor(basePath = `.`) {
 		this.basePath = basePath;
+		if (!fs.existsSync(basePath)) fs.mkdirSync(basePath);
 	}
 
 	async get(dataPath) {

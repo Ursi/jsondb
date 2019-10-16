@@ -17,9 +17,10 @@ module.exports = class {
 		if (!fs.existsSync(basePath)) fs.mkdirSync(basePath);
 	}
 
-	async get(dataPath) {
+	async get(dataPath, defaultValue) {
 		dataPath = addJson(dataPath);
 		const fullPath = path.join(this.basePath, dataPath);
+		if (!fs.existsSync(fullPath)) return defaultValue;
 		try {
 			return JSON.parse(await fsp.readFile(fullPath));
 		} catch (error) {

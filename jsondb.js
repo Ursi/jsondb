@@ -23,7 +23,7 @@ module.exports = class {
 		} catch (error) {
 			if (error.name == 'SyntaxError') {
 				let backup = JSON.parse(await fsp.readFile(fullPath.replace(/\.json$/, '.backup')));
-				await this.write(dataPath, backup, true, false);
+				await this.write(dataPath, backup, {overwrite: true, backup: false});
 				return backup;
 			}
 		}
@@ -38,7 +38,10 @@ module.exports = class {
 		}
 	}
 
-	async update(dataPath, data) {
+	async update(dataPath, data, {
+		replacer = null,
+		space = ``,
+	} = {}) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
 		if (!fs.existsSync(fullPath)) {
@@ -52,12 +55,17 @@ module.exports = class {
 			} else {
 				let newData = Object.assign(dbData, data);
 				await fsp.copyFile(fullPath, fullPath.replace(/\.json$/, '.backup'));
-				fsp.writeFile(fullPath, JSON.stringify(newData));
+				fsp.writeFile(fullPath, JSON.stringify(newData, replacer, space));
 			}
 		}
 	}
 
-	async write(dataPath, data, overwrite = false, backup = true) {
+	async write(dataPath, data, {
+		overwrite = false,
+		backup = true,
+		replacer = null,
+		space = ``,
+	} = {}) {
 		dataPath = addJson(dataPath);
 		let fullPath = path.join(this.basePath, dataPath);
 		if (fs.existsSync(fullPath) && !overwrite) {
@@ -67,7 +75,7 @@ module.exports = class {
 				await fsp.copyFile(fullPath, fullPath.replace(/\.json$/, '.backup'));
 			}
 
-			await fsp.writeFile(fullPath, JSON.stringify(data));
+			await fsp.writeFile(fullPath, JSON.stringify(data, replacer, space));
 		}
 	}
 }

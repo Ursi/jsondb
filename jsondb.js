@@ -17,7 +17,7 @@ module.exports = class {
 		if (!fs.existsSync(basePath)) fs.mkdirSync(basePath);
 	}
 
-	async get(dataPath, defaultValue) {
+	async get(dataPath, defaultValue = {}) {
 		dataPath = addJson(dataPath);
 		const fullPath = path.join(this.basePath, dataPath);
 		if (!fs.existsSync(fullPath)) return defaultValue;
